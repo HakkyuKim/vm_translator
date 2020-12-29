@@ -1,0 +1,8 @@
+# vscode
+.vscode/
+
+# docs
+docs/internal/
+
+# tools
+tools/
