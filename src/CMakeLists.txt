@@ -1,0 +1,1 @@
+add_library(STACK_SEGMENT_TRANSLATOR StackSegmentTRanslator.h StackSegmentTRanslator.cc)
