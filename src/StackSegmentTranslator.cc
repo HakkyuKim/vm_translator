@@ -7,8 +7,8 @@ std::string StackSegmentTranslator::PushFromD(){
 }
 
 std::string StackSegmentTranslator::PopToD(){
-    std::string vmCode = "@SP\nA=M\nD=M\n";
-    vmCode += DecreaseSP();
+    std::string vmCode = DecreaseSP();
+    vmCode += "A=M\nD=M\n";
     return vmCode;
 }
 

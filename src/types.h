@@ -5,7 +5,9 @@
 
 enum OperationType {
     PUSH,
-    POP
+    POP,
+    ADD,
+    SUB
 };
 
 enum SegmentType {

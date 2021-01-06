@@ -8,8 +8,8 @@ class VmSegmentTranslator {
         VmSegmentTranslator(){}
         VmSegmentTranslator(std::string symbol)
         :baseAddrPointerSymbol_(symbol){}
-        std::string PutFromD();
-        std::string PutToD(std::string index);
+        virtual std::string PutFromD();
+        virtual std::string PutToD(std::string index);
         std::string SetLocationOverwrite(std::string index);
     private:
         std::string SetLocation(std::string index);
