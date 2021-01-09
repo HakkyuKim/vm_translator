@@ -6,9 +6,10 @@
 class ConstantSegmentTranslator : public VmSegmentTranslator{
     public:
         ConstantSegmentTranslator()
-        :VmSegmentTranslator("constant"){}
-        std::string PutFromD() override;
-        std::string PutToD(std::string index) override;
+        :VmSegmentTranslator(""){}
+        CodeBlock CopyFromD(std::string address, std::string index) override;
+        CodeBlock CopyToD(std::string address, std::string index) override;
+        CodeBlock CalculateAddress(std::string address, std::string index) override;
 };
 
 #endif // __CONSTANTSEGMENTTRANSLATOR_H__

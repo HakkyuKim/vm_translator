@@ -1,28 +1,40 @@
 #include "VmSegmentTranslator.h"
 
-std::string VmSegmentTranslator::PutToD(std::string index) 
+// The sub-operation of 'push segment i'.
+// Generates assembly code that copies the value in the related segment's position 
+// referenced by 'address' to the D register.
+//   D = RAM[RAM[address]]
+// Typically the 'address' is one the general-purpose registers (13 ~ 15) storing
+// the pre-calculated address of the related segment's i-th position.
+CodeBlock VmSegmentTranslator::CopyToD(std::string address, std::string index) 
 {
-    return SetLocation(index) + "D=M\n";
+    return CodeBlock(std::vector<std::string>({ "@" + address, "A=M", "D=M"}));
 }
 
-std::string VmSegmentTranslator::PutFromD() 
+// The sub-operation of 'pop segment i'.
+// Generates assembly code that copies the value stored in D register 
+// to the segment position referenced by 'address'.
+//   RAM[RAM[address]] = D
+// Typically the 'address' is one the general-purpose registers (13 ~ 15) storing
+// the pre-calculated address of the related segment's i-th position.
+CodeBlock VmSegmentTranslator::CopyFromD(std::string address, std::string index) 
 {
-    return "@" + baseAddrPointerSymbol_ + "\nA=M\nM=D\n";
+    return CodeBlock(std::vector<std::string>({ "@" + address, "A=M", "M=D"}));
 }
 
-std::string VmSegmentTranslator::SetLocation(std::string index)
+// The sub-operation of 'push/pop segment i'.
+// Generates assembly code that calculates the address of the 
+// related segment's i-th postion to 'address'.
+//   RAM[address] = D
+CodeBlock VmSegmentTranslator::CalculateAddress(std::string address, std::string index)
 {
-    std::string asmCode = "";
-    asmCode += "@" + index + "\nD=A\n";
-    asmCode += "@" + baseAddrPointerSymbol_ + "\nA=M\nA=A+D\n";
-    return asmCode;
-}
-
-std::string VmSegmentTranslator::SetLocationOverwrite(std::string index) 
-{
-    std::string asmCode ="";
-    std::string operation = std::stoi(index) < 0 ? "-" : "+";
-    asmCode += "@" + index + "\nD=A\n";
-    asmCode += "@" + baseAddrPointerSymbol_ + "\nM=M" + operation + "D\n";
-    return asmCode;
+    CodeBlock codeBlock;
+    codeBlock.WriteLine("@" + index);
+    codeBlock.WriteLine("D=A");
+    codeBlock.WriteLine("@" + baseAddrPointerSymbol_);
+    codeBlock.WriteLine("A=M");
+    codeBlock.WriteLine("D=D+A");
+    codeBlock.WriteLine("@" + address);
+    codeBlock.WriteLine("M=D");
+    return codeBlock;
 }

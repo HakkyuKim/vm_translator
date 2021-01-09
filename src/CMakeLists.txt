@@ -1,13 +1,20 @@
+add_library(CODE_BLOCK CodeBlock.h CodeBlock.cc)
 add_library(STACK_SEGMENT_TRANSLATOR StackSegmentTranslator.h StackSegmentTranslator.cc)
 add_library(VM_SEGMENT_TRANSLATOR VmSegmentTranslator.h 
                                   VmSegmentTranslator.cc
                                   ConstantSegmentTranslator.h
-                                  ConstantSegmentTranslator.cc)
+                                  ConstantSegmentTranslator.cc
+                                  StaticSegmentTranslator.h
+                                  StaticSegmentTranslator.cc
+                                  TempSegmentTranslator.h
+                                  TempSegmentTranslator.cc
+                                  PointerSegmentTranslator.h
+                                  PointerSegmentTranslator.cc)
 
-add_library(CODE_WRITER types.h
-                        StackSegmentTranslator.h
-                        VmSegmentTranslator.h
-                        CodeWriter.h 
+add_library(CODE_WRITER CodeWriter.h 
                         CodeWriter.cc)
 
-target_link_libraries(CODE_WRITER STACK_SEGMENT_TRANSLATOR VM_SEGMENT_TRANSLATOR)
+target_link_libraries(CODE_WRITER STACK_SEGMENT_TRANSLATOR VM_SEGMENT_TRANSLATOR CODE_BLOCK)
+
+add_library(LINE_READER LineReader.h LineReader.cc)
+add_library(PARSER Parser.h Parser.cc)

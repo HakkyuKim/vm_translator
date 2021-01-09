@@ -2,12 +2,18 @@
 #include "ConstantSegmentTranslator.h"
 
 
-std::string ConstantSegmentTranslator::PutFromD() 
+CodeBlock ConstantSegmentTranslator::CopyFromD(std::string address, std::string index)
 {
-    throw std::logic_error("Putting a value to a constant stack is an invalid operation.");
+    return CodeBlock();
 }
 
-std::string ConstantSegmentTranslator::PutToD(std::string index) 
+// For the constant segment, A register needs to be set to 'index'.
+CodeBlock ConstantSegmentTranslator::CopyToD(std::string address, std::string index) 
 {
-    return "@" + index + "\nD=A\n";
+    return CodeBlock(std::vector<std::string>({"@" + index, "D=A"}));
+}
+
+CodeBlock ConstantSegmentTranslator::CalculateAddress(std::string address, std::string index) 
+{
+    return CodeBlock();
 }

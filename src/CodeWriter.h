@@ -3,25 +3,35 @@
 
 #include <map>
 #include <string>
+#include "CodeBlock.h"
 #include "StackSegmentTranslator.h"
 #include "types.h"
 #include "VmSegmentTranslator.h"
 
+#define GENERAL_PURPOSE_REGISTER_0 "R13"
+#define GENERAL_PURPOSE_REGISTER_1 "R14"
+#define GENERAL_PURPOSE_REGISTER_2 "R15"
+
 class CodeWriter{
     public:
-    CodeWriter();
+    CodeWriter(std::string fileName);
     ~CodeWriter();
-    std::string Decode(Tokens tokens);
+    CodeBlock Decode(Tokens tokens);
+    uint32_t lineNumber;
 
     private:
     std::map<SegmentType, VmSegmentTranslator*> segments_;
     StackSegmentTranslator stack_;
 
-    std::string DecodePushOperation(Tokens tokens);
-    std::string DecodePopOperation(Tokens tokens);
-    std::string DecodeAddSubOperation(Tokens tokens);
+    CodeBlock DecodePushOperation(Tokens tokens);
+    CodeBlock DecodePopOperation(Tokens tokens);
+    CodeBlock DecodeAddSubOperation(Tokens tokens);
+    CodeBlock DecodeNegNotOperation(Tokens tokens);
+    CodeBlock DecodeAndOrOperation(Tokens tokens);
+    CodeBlock DecodeComparisonOperation(Tokens tokens, uint32_t lineNum);
 
-    std::string PlaceDToTempRegister(std::string symbol);
+    std::string GetComparisonOperator(OperationType operation);
+    CodeBlock PlaceDToTempRegister(std::string symbol);
 };
 
 #endif // __CODEWRITER_H__

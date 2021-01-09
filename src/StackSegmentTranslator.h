@@ -1,15 +1,17 @@
-#ifndef STACK_SEGMENT_TRANSLATOR_H_
-#define STACK_SEGMENT_TRANSLATOR_H_
+#ifndef __STACKSEGMENTTRANSLATOR_H__
+#define __STACKSEGMENTTRANSLATOR_H__
 
 #include <string>
+#include "CodeBlock.h"
 
 class StackSegmentTranslator {
     public:
-        std::string PushFromD();
-        std::string PopToD();
+        CodeBlock PushFromD();
+        CodeBlock PopToD();
     private:
-        std::string IncreaseSP();
-        std::string DecreaseSP();
+        CodeBlock IncreaseSP();
+        CodeBlock DecreaseSP();
 };
 
-#endif
+
+#endif // __STACKSEGMENTTRANSLATOR_H__

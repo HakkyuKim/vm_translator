@@ -1,19 +1,21 @@
-#ifndef VM_SEGMENT_TRANSLATOR_H_
-#define VM_SEGMENT_TRANSLATOR_H_
+#ifndef __VMSEGMENTTRANSLATOR_H__
+#define __VMSEGMENTTRANSLATOR_H__
+
 
 #include <string>
+#include "CodeBlock.h"
 
 class VmSegmentTranslator {
     public:
         VmSegmentTranslator(){}
         VmSegmentTranslator(std::string symbol)
         :baseAddrPointerSymbol_(symbol){}
-        virtual std::string PutFromD();
-        virtual std::string PutToD(std::string index);
-        std::string SetLocationOverwrite(std::string index);
+        virtual CodeBlock CopyFromD(std::string address, std::string index);
+        virtual CodeBlock CopyToD(std::string address, std::string index);
+        virtual CodeBlock CalculateAddress(std::string address, std::string index);
     private:
-        std::string SetLocation(std::string index);
         std::string baseAddrPointerSymbol_;
 };
 
-#endif
+
+#endif // __VMSEGMENTTRANSLATOR_H__

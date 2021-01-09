@@ -1,23 +1,21 @@
 #include "StackSegmentTranslator.h"
 
-std::string StackSegmentTranslator::PushFromD(){
-    std::string vmCode = "@SP\nA=M\nM=D\n";
-    vmCode += IncreaseSP();
-    return vmCode;
+CodeBlock StackSegmentTranslator::PushFromD(){
+    CodeBlock codeBlock = CodeBlock(std::vector<std::string>({"@SP", "A=M", "M=D"}));
+    codeBlock.extend(IncreaseSP());
+    return codeBlock;
 }
 
-std::string StackSegmentTranslator::PopToD(){
-    std::string vmCode = DecreaseSP();
-    vmCode += "A=M\nD=M\n";
-    return vmCode;
+CodeBlock StackSegmentTranslator::PopToD(){
+    CodeBlock codeBlock = DecreaseSP();
+    codeBlock.extend(CodeBlock(std::vector<std::string>({"A=M", "D=M"})));
+    return codeBlock;
 }
 
-std::string StackSegmentTranslator::IncreaseSP(){
-    std::string vmCode = "@SP\nM=M+1\n";
-    return vmCode;
+CodeBlock StackSegmentTranslator::IncreaseSP(){
+    return CodeBlock(std::vector<std::string>({"@SP","M=M+1"}));
 }
 
-std::string StackSegmentTranslator::DecreaseSP(){
-    std::string vmCode = "@SP\nM=M-1\n";
-    return vmCode;
+CodeBlock StackSegmentTranslator::DecreaseSP(){
+    return CodeBlock(std::vector<std::string>({"@SP","M=M-1"}));
 }
