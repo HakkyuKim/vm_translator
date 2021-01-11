@@ -9,3 +9,7 @@ tools/
 
 # builds
 out/
+
+# answers
+tests/project/**/*.asm
+tests/project/**/*.out
