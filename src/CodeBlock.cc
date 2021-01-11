@@ -1,4 +1,5 @@
 #include "CodeBlock.h"
+#include "CodeBlockBuilder.h"
 
 void CodeBlock::WriteLine(std::string codeLine) 
 {
@@ -33,6 +34,11 @@ void CodeBlock::ReplaceWhere(std::vector<std::string> replacements)
             codes_[i] = "@" + replacements[i];
         }
     }
+}
+
+CodeBlockBuilder CodeBlock::Create() 
+{
+    return CodeBlockBuilder();
 }
 
 CodeBlock::CodeBlock(std::vector<std::string> codes) 

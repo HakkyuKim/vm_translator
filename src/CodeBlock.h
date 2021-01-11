@@ -5,6 +5,8 @@
 #include <vector>
 #include <initializer_list>
 
+class CodeBlockBuilder;
+
 class CodeBlock {
 public:
   CodeBlock(){}
@@ -15,6 +17,9 @@ public:
   uint32_t GetNumberOfLines();
   std::string String();
   void ReplaceWhere(std::vector<std::string> replacements);
+  
+  static CodeBlockBuilder Create();
+  friend CodeBlockBuilder;
 private:
   std::vector<std::string> codes_;
 };

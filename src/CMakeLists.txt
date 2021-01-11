@@ -1,4 +1,8 @@
-add_library(CODE_BLOCK CodeBlock.h CodeBlock.cc)
+add_library(CODE_BLOCK CodeBlock.h 
+                       CodeBlock.cc
+                       CodeBlockBuilder.h
+                       CodeBlockBuilder.cc)
+                       
 add_library(STACK_SEGMENT_TRANSLATOR StackSegmentTranslator.h StackSegmentTranslator.cc)
 add_library(VM_SEGMENT_TRANSLATOR VmSegmentTranslator.h 
                                   VmSegmentTranslator.cc
