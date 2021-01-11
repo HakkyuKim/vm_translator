@@ -15,11 +15,18 @@ ParseResult Parser::parse(std::string vmCodeLine)
     };
 
     OperationType operationType = GetOperationType(tokenStrings[0]);
-    SegmentType segmentType = tokenStrings.size() >= 2 ? GetSegmentType(tokenStrings[1]) : defulatSegment;
-    std::string index = tokenStrings.size() >= 3 ? tokenStrings[2] : "0";
-
-    return ParseResult(true, ParseType::CODE,
+    if(operationType == OperationType::LABEL || 
+       operationType == OperationType::GOTO || 
+       operationType == OperationType::IFGOTO) {
+        return ParseResult(true, ParseType::CODE,
+                        new Tokens(operationType, defulatSegment, tokenStrings[1]));
+    }
+    else{
+        SegmentType segmentType = tokenStrings.size() >= 2 ? GetSegmentType(tokenStrings[1]) : defulatSegment;
+        std::string index = tokenStrings.size() >= 3 ? tokenStrings[2] : "0";
+        return ParseResult(true, ParseType::CODE,
                        new Tokens(operationType, segmentType, index));
+    }
 }
 
 std::vector<std::string> Parser::SplitBySpace(std::string line)
@@ -84,6 +91,15 @@ OperationType Parser::GetOperationType(std::string operationType)
     }
     else if(operationType == "or"){
         return OperationType::OR;
+    }
+    else if(operationType == "label"){
+        return OperationType::LABEL;
+    }
+    else if(operationType == "goto"){
+        return OperationType::GOTO;
+    }
+    else if(operationType == "if-goto"){
+        return OperationType::IFGOTO;
     }
     else
     {

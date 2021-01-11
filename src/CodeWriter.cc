@@ -1,6 +1,7 @@
 #include <iostream>
 #include <vector>
 #include "CodeWriter.h"
+#include "CodeBlockBuilder.h"
 #include "ConstantSegmentTranslator.h"
 #include "StaticSegmentTranslator.h"
 #include "TempSegmentTranslator.h"
@@ -56,6 +57,15 @@ CodeBlock CodeWriter::Decode(Tokens tokens)
     case OperationType::LT:
     case OperationType::GT:
         codeBlock = DecodeComparisonOperation(tokens, lineNumber);
+        break;
+    case OperationType::LABEL:
+        codeBlock = DecodeLable(BranchTokens(tokens.operation, tokens.index));
+        break;
+    case OperationType::GOTO:
+        codeBlock = DecodeGoto(BranchTokens(tokens.operation, tokens.index));
+        break;
+    case OperationType::IFGOTO:
+        codeBlock = DecodeIfGoto(BranchTokens(tokens.operation, tokens.index));
         break;
     default:
         break;
@@ -165,6 +175,27 @@ CodeBlock CodeWriter::DecodeComparisonOperation(Tokens tokens, uint32_t lineNum)
     codeBlock.extend(breakBlock);
     codeBlock.extend(trueBlock);
     return codeBlock;
+}
+
+CodeBlock CodeWriter::DecodeLable(BranchTokens tokens) 
+{
+    return CodeBlock::Create().WriteLine("(" + tokens.label + ")").build();
+}
+
+CodeBlock CodeWriter::DecodeGoto(BranchTokens tokens) 
+{
+    return CodeBlock::Create().WriteLine("@" + tokens.label)
+                              .WriteLine("0; JMP")
+                              .build();
+}
+
+CodeBlock CodeWriter::DecodeIfGoto(BranchTokens tokens) 
+{
+    // Jumps to 'label' if the value of D is "greater than 0".
+    return CodeBlock::Create().Extend(stack_.PopToD())
+                              .WriteLine("@" + tokens.label)
+                              .WriteLine("D; JGT")
+                              .build();
 }
 
 std::string CodeWriter::GetComparisonOperator(OperationType operation)

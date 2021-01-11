@@ -18,7 +18,10 @@ enum OperationType {
     GT,
     AND,
     OR,
-    NOT
+    NOT,
+    LABEL,
+    GOTO,
+    IFGOTO,
 };
 
 enum SegmentType {
@@ -32,6 +35,12 @@ enum SegmentType {
     TEMP
 };
 
+struct BaseTokens {
+    BaseTokens(OperationType operationType)
+    :operationType(operationType){};
+    OperationType operationType;
+};
+
 class Tokens {
     public:
     Tokens(OperationType operation, SegmentType segmentType, std::string index)
@@ -41,5 +50,13 @@ class Tokens {
     std::string index;
     private:
 };
+
+struct BranchTokens: public BaseTokens
+{
+    BranchTokens(OperationType operationType, std::string label)
+    :label(label), BaseTokens(operationType){};
+    std::string label;
+};
+
 
 #endif // __TYPES_H__

@@ -29,6 +29,9 @@ class CodeWriter{
     CodeBlock DecodeNegNotOperation(Tokens tokens);
     CodeBlock DecodeAndOrOperation(Tokens tokens);
     CodeBlock DecodeComparisonOperation(Tokens tokens, uint32_t lineNum);
+    CodeBlock DecodeLable(BranchTokens tokens);
+    CodeBlock DecodeGoto(BranchTokens tokens);
+    CodeBlock DecodeIfGoto(BranchTokens tokens);
 
     std::string GetComparisonOperator(OperationType operation);
     CodeBlock PlaceDToTempRegister(std::string symbol);
