@@ -22,6 +22,7 @@ enum OperationType {
     LABEL,
     GOTO,
     IFGOTO,
+    END,
 };
 
 enum SegmentType {

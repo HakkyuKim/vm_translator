@@ -17,3 +17,8 @@ CodeBlock CodeBlockBuilder::build()
 {
     return std::move(codeBlock_);
 }
+
+uint32_t CodeBlockBuilder::GetLineNumbers() 
+{
+    return static_cast<uint32_t>(codeBlock_.codes_.size());
+}

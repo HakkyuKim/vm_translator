@@ -19,6 +19,7 @@ CodeWriter::CodeWriter(std::string fileName)
         {SegmentType::THAT, new VmSegmentTranslator("THAT")},
         {SegmentType::POINTER, new PointerSegmentTranslator()}};
     lineNumber = 0;
+    contextHandler_.CreateFileContext(fileName);
 }
 
 CodeWriter::~CodeWriter()
@@ -30,110 +31,107 @@ CodeWriter::~CodeWriter()
     }
 }
 
-CodeBlock CodeWriter::Decode(Tokens tokens)
+void CodeWriter::Decode(Tokens tokens)
 {
-    CodeBlock codeBlock;
     switch (tokens.operation)
     {
     case OperationType::POP:
-        codeBlock = DecodePopOperation(tokens);
+        DecodePopOperation(tokens);
         break;
     case OperationType::PUSH:
-        codeBlock = DecodePushOperation(tokens);
+        DecodePushOperation(tokens);
         break;
     case OperationType::ADD:
     case OperationType::SUB:
-        codeBlock = DecodeAddSubOperation(tokens);
+        DecodeAddSubOperation(tokens);
         break;
     case OperationType::NEG:
     case OperationType::NOT:
-        codeBlock = DecodeNegNotOperation(tokens);
+        DecodeNegNotOperation(tokens);
         break;
     case OperationType::AND:
     case OperationType::OR:
-        codeBlock = DecodeAndOrOperation(tokens);
+        DecodeAndOrOperation(tokens);
         break;
     case OperationType::EQ:
     case OperationType::LT:
     case OperationType::GT:
-        codeBlock = DecodeComparisonOperation(tokens, lineNumber);
+        DecodeComparisonOperation(tokens, lineNumber);
         break;
     case OperationType::LABEL:
-        codeBlock = DecodeLable(BranchTokens(tokens.operation, tokens.index));
+        DecodeLable(BranchTokens(tokens.operation, tokens.index));
         break;
     case OperationType::GOTO:
-        codeBlock = DecodeGoto(BranchTokens(tokens.operation, tokens.index));
+        DecodeGoto(BranchTokens(tokens.operation, tokens.index));
         break;
     case OperationType::IFGOTO:
-        codeBlock = DecodeIfGoto(BranchTokens(tokens.operation, tokens.index));
+        DecodeIfGoto(BranchTokens(tokens.operation, tokens.index));
         break;
     default:
         break;
     }
-    lineNumber += codeBlock.GetNumberOfLines();
-    return codeBlock;
+    contextHandler_.SwitchContext(tokens.operation, codeBuilder_);
+    lineNumber = codeBuilder_.GetLineNumbers();
 }
 
-CodeBlock CodeWriter::DecodePopOperation(Tokens tokens)
+CodeBlock CodeWriter::GenerateCode() 
 {
-    CodeBlock codeBlock;
-    VmSegmentTranslator *segmentTranslator = segments_[tokens.segmentType];
-    codeBlock.extend(segmentTranslator->CalculateAddress(GENERAL_PURPOSE_REGISTER_0, tokens.index));
-    codeBlock.extend(stack_.PopToD());
-    codeBlock.extend(segmentTranslator->CopyFromD(GENERAL_PURPOSE_REGISTER_0, tokens.index));
+    contextHandler_.SwitchContext(OperationType::END, codeBuilder_);
+    CodeBlock codeBlock = contextHandler_.Merge();
     return codeBlock;
 }
 
-CodeBlock CodeWriter::DecodePushOperation(Tokens tokens)
+void CodeWriter::DecodePopOperation(Tokens tokens)
 {
-    CodeBlock codeBlock;
     VmSegmentTranslator *segmentTranslator = segments_[tokens.segmentType];
-    codeBlock.extend(segmentTranslator->CalculateAddress(GENERAL_PURPOSE_REGISTER_0, tokens.index));
-    codeBlock.extend(segmentTranslator->CopyToD(GENERAL_PURPOSE_REGISTER_0, tokens.index));
-    codeBlock.extend(stack_.PushFromD());
-    return codeBlock;
+    codeBuilder_.Extend(segmentTranslator->CalculateAddress(GENERAL_PURPOSE_REGISTER_0, tokens.index))
+                .Extend(stack_.PopToD())
+                .Extend(segmentTranslator->CopyFromD(GENERAL_PURPOSE_REGISTER_0, tokens.index));
 }
 
-CodeBlock CodeWriter::DecodeAddSubOperation(Tokens tokens)
+void CodeWriter::DecodePushOperation(Tokens tokens)
+{
+    VmSegmentTranslator *segmentTranslator = segments_[tokens.segmentType];
+    codeBuilder_.Extend(segmentTranslator->CalculateAddress(GENERAL_PURPOSE_REGISTER_0, tokens.index))
+                .Extend(segmentTranslator->CopyToD(GENERAL_PURPOSE_REGISTER_0, tokens.index))
+                .Extend(stack_.PushFromD());
+}
+
+void CodeWriter::DecodeAddSubOperation(Tokens tokens)
 {
     std::string asmCode;
     std::string operation = tokens.operation == OperationType::ADD ? "+" : "-";
     std::string tempRegister = "R13";
-    CodeBlock codeBlock;
-    codeBlock.extend(stack_.PopToD());
-    codeBlock.extend(PlaceDToTempRegister(tempRegister));
-    codeBlock.extend(stack_.PopToD());
-    codeBlock.WriteLine("@" + tempRegister);
-    codeBlock.WriteLine("D=D" + operation + "M");
-    codeBlock.extend(stack_.PushFromD());
-    return codeBlock;
+
+    codeBuilder_.Extend(stack_.PopToD())
+    .Extend(PlaceDToTempRegister(tempRegister))
+    .Extend(stack_.PopToD())
+    .WriteLine("@" + tempRegister)
+    .WriteLine("D=D" + operation + "M")
+    .Extend(stack_.PushFromD());
 }
 
-CodeBlock CodeWriter::DecodeNegNotOperation(Tokens tokens)
+void CodeWriter::DecodeNegNotOperation(Tokens tokens)
 {
     std::string operation = tokens.operation == OperationType::NEG ? "-" : "!";
-    CodeBlock codeBlock;
-    codeBlock.extend(stack_.PopToD());
-    codeBlock.WriteLine("D=" + operation + "D");
-    codeBlock.extend(stack_.PushFromD());
-    return codeBlock;
+    codeBuilder_.Extend(stack_.PopToD())
+    .WriteLine("D=" + operation + "D")
+    .Extend(stack_.PushFromD());
 }
 
-CodeBlock CodeWriter::DecodeAndOrOperation(Tokens tokens)
+void CodeWriter::DecodeAndOrOperation(Tokens tokens)
 {
-    CodeBlock codeBlock;
     std::string operation = tokens.operation == OperationType::OR ? "|" : "&";
     std::string tempRegister = "R13";
-    codeBlock.extend(stack_.PopToD());
-    codeBlock.extend(PlaceDToTempRegister(tempRegister));
-    codeBlock.extend(stack_.PopToD());
-    codeBlock.WriteLine("@" + tempRegister);
-    codeBlock.WriteLine("D=D" + operation + "M");
-    codeBlock.extend(stack_.PushFromD());
-    return codeBlock;
+    codeBuilder_.Extend(stack_.PopToD())
+    .Extend(PlaceDToTempRegister(tempRegister))
+    .Extend(stack_.PopToD())
+    .WriteLine("@" + tempRegister)
+    .WriteLine("D=D" + operation + "M")
+    .Extend(stack_.PushFromD());
 }
 
-CodeBlock CodeWriter::DecodeComparisonOperation(Tokens tokens, uint32_t lineNum)
+void CodeWriter::DecodeComparisonOperation(Tokens tokens, uint32_t lineNum)
 {
     std::string operation = GetComparisonOperator(tokens.operation);
     std::string tempRegister = "R13";
@@ -168,34 +166,30 @@ CodeBlock CodeWriter::DecodeComparisonOperation(Tokens tokens, uint32_t lineNum)
     breakBlock.ReplaceWhere(std::vector<std::string>({std::to_string(input2)}));
 
     // Merge
-    CodeBlock codeBlock;
-    codeBlock.extend(setBlock);
-    codeBlock.extend(compareBlock);
-    codeBlock.extend(falseBlock);
-    codeBlock.extend(breakBlock);
-    codeBlock.extend(trueBlock);
-    return codeBlock;
+    codeBuilder_.Extend(setBlock)
+    .Extend(compareBlock)
+    .Extend(falseBlock)
+    .Extend(breakBlock)
+    .Extend(trueBlock);
 }
 
-CodeBlock CodeWriter::DecodeLable(BranchTokens tokens) 
+void CodeWriter::DecodeLable(BranchTokens tokens) 
 {
-    return CodeBlock::Create().WriteLine("(" + tokens.label + ")").build();
+    codeBuilder_.WriteLine("(" + tokens.label + ")");
 }
 
-CodeBlock CodeWriter::DecodeGoto(BranchTokens tokens) 
+void CodeWriter::DecodeGoto(BranchTokens tokens) 
 {
-    return CodeBlock::Create().WriteLine("@" + tokens.label)
-                              .WriteLine("0; JMP")
-                              .build();
+    codeBuilder_.WriteLine("@" + tokens.label)
+                              .WriteLine("0; JMP");
 }
 
-CodeBlock CodeWriter::DecodeIfGoto(BranchTokens tokens) 
+void CodeWriter::DecodeIfGoto(BranchTokens tokens) 
 {
     // Jumps to 'label' if the value of D is "greater than 0".
-    return CodeBlock::Create().Extend(stack_.PopToD())
+    codeBuilder_.Extend(stack_.PopToD())
                               .WriteLine("@" + tokens.label)
-                              .WriteLine("D; JGT")
-                              .build();
+                              .WriteLine("D; JGT");
 }
 
 std::string CodeWriter::GetComparisonOperator(OperationType operation)
