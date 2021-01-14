@@ -6,6 +6,7 @@
 #include "StaticSegmentTranslator.h"
 #include "TempSegmentTranslator.h"
 #include "PointerSegmentTranslator.h"
+#include "RestoreBlock.h"
 
 CodeWriter::CodeWriter(std::string fileName)
 {
@@ -31,46 +32,54 @@ CodeWriter::~CodeWriter()
     }
 }
 
-void CodeWriter::Decode(Tokens tokens)
+void CodeWriter::Decode(std::shared_ptr<BaseTokens> tokens)
 {
-    switch (tokens.operation)
+    switch (tokens->operationType)
     {
     case OperationType::POP:
-        DecodePopOperation(tokens);
+        DecodePopOperation(*static_cast<Tokens*>(tokens.get()));
         break;
     case OperationType::PUSH:
-        DecodePushOperation(tokens);
+        DecodePushOperation(*static_cast<Tokens*>(tokens.get()));
         break;
     case OperationType::ADD:
     case OperationType::SUB:
-        DecodeAddSubOperation(tokens);
+        DecodeAddSubOperation(*static_cast<ArithmeticLogicalTokens*>(tokens.get()));
         break;
     case OperationType::NEG:
     case OperationType::NOT:
-        DecodeNegNotOperation(tokens);
+        DecodeNegNotOperation(*static_cast<ArithmeticLogicalTokens*>(tokens.get()));
         break;
     case OperationType::AND:
     case OperationType::OR:
-        DecodeAndOrOperation(tokens);
+        DecodeAndOrOperation(*static_cast<ArithmeticLogicalTokens*>(tokens.get()));
         break;
     case OperationType::EQ:
     case OperationType::LT:
     case OperationType::GT:
-        DecodeComparisonOperation(tokens, lineNumber);
+        DecodeComparisonOperation(*static_cast<ArithmeticLogicalTokens*>(tokens.get()), lineNumber);
         break;
     case OperationType::LABEL:
-        DecodeLable(BranchTokens(tokens.operation, tokens.index));
+        DecodeLable(*static_cast<BranchTokens*>(tokens.get()));
         break;
     case OperationType::GOTO:
-        DecodeGoto(BranchTokens(tokens.operation, tokens.index));
+        DecodeGoto(*static_cast<BranchTokens*>(tokens.get()));
         break;
     case OperationType::IFGOTO:
-        DecodeIfGoto(BranchTokens(tokens.operation, tokens.index));
+        DecodeIfGoto(*static_cast<BranchTokens*>(tokens.get()));
+        break;
+    case OperationType::FUNC:
+        DecodeFuncDeclare(*static_cast<FuncTokens*>(tokens.get()));
+        break;
+    case OperationType::CALL:
+        DecodeFuncCall(*static_cast<FuncTokens*>(tokens.get()));
+        break;
+    case OperationType::RETURN:
+        DecodeReturn(*static_cast<ReturnTokens*>(tokens.get()), contextHandler_.GetCurrentFunctionName());
         break;
     default:
         break;
     }
-    contextHandler_.SwitchContext(tokens.operation, codeBuilder_);
     lineNumber = codeBuilder_.GetLineNumbers();
 }
 
@@ -97,10 +106,10 @@ void CodeWriter::DecodePushOperation(Tokens tokens)
                 .Extend(stack_.PushFromD());
 }
 
-void CodeWriter::DecodeAddSubOperation(Tokens tokens)
+void CodeWriter::DecodeAddSubOperation(ArithmeticLogicalTokens tokens)
 {
     std::string asmCode;
-    std::string operation = tokens.operation == OperationType::ADD ? "+" : "-";
+    std::string operation = tokens.operationType == OperationType::ADD ? "+" : "-";
     std::string tempRegister = "R13";
 
     codeBuilder_.Extend(stack_.PopToD())
@@ -111,17 +120,17 @@ void CodeWriter::DecodeAddSubOperation(Tokens tokens)
     .Extend(stack_.PushFromD());
 }
 
-void CodeWriter::DecodeNegNotOperation(Tokens tokens)
+void CodeWriter::DecodeNegNotOperation(ArithmeticLogicalTokens tokens)
 {
-    std::string operation = tokens.operation == OperationType::NEG ? "-" : "!";
+    std::string operation = tokens.operationType == OperationType::NEG ? "-" : "!";
     codeBuilder_.Extend(stack_.PopToD())
     .WriteLine("D=" + operation + "D")
     .Extend(stack_.PushFromD());
 }
 
-void CodeWriter::DecodeAndOrOperation(Tokens tokens)
+void CodeWriter::DecodeAndOrOperation(ArithmeticLogicalTokens tokens)
 {
-    std::string operation = tokens.operation == OperationType::OR ? "|" : "&";
+    std::string operation = tokens.operationType == OperationType::OR ? "|" : "&";
     std::string tempRegister = "R13";
     codeBuilder_.Extend(stack_.PopToD())
     .Extend(PlaceDToTempRegister(tempRegister))
@@ -131,9 +140,9 @@ void CodeWriter::DecodeAndOrOperation(Tokens tokens)
     .Extend(stack_.PushFromD());
 }
 
-void CodeWriter::DecodeComparisonOperation(Tokens tokens, uint32_t lineNum)
+void CodeWriter::DecodeComparisonOperation(ArithmeticLogicalTokens tokens, uint32_t lineNum)
 {
-    std::string operation = GetComparisonOperator(tokens.operation);
+    std::string operation = GetComparisonOperator(tokens.operationType);
     std::string tempRegister = "R13";
 
     // Set Block
@@ -181,15 +190,111 @@ void CodeWriter::DecodeLable(BranchTokens tokens)
 void CodeWriter::DecodeGoto(BranchTokens tokens) 
 {
     codeBuilder_.WriteLine("@" + tokens.label)
-                              .WriteLine("0; JMP");
+                .WriteLine("0; JMP");
 }
 
 void CodeWriter::DecodeIfGoto(BranchTokens tokens) 
 {
     // Jumps to 'label' if the value of D is "greater than 0".
     codeBuilder_.Extend(stack_.PopToD())
-                              .WriteLine("@" + tokens.label)
-                              .WriteLine("D; JGT");
+                .WriteLine("@" + tokens.label)
+                .WriteLine("D; JGT");
+}
+
+void CodeWriter::DecodeFuncDeclare(FuncTokens tokens) 
+{
+    contextHandler_.CreateFunctionContext(tokens.funcName, tokens.n);
+
+    codeBuilder_.WriteLine("(" + tokens.funcName +")");
+    uint32_t n = static_cast<uint32_t>(std::stoi(tokens.n));
+    for(uint32_t i = 0; i < n; ++i){
+        codeBuilder_.WriteLine("@0")
+                    .WriteLine("@D=A")
+                    .Extend(stack_.PushFromD());
+    }
+}
+
+void CodeWriter::DecodeFuncCall(FuncTokens tokens) 
+{
+    // ARG = SP - tokens.n
+    CodeBlock setArg = CodeBlock::Create().WriteLine("@SP")
+                                          .WriteLine("D=A")
+                                          .WriteLine("@" + tokens.n)
+                                          .WriteLine("D=D-A")
+                                          .WriteLine("@ARG")
+                                          .WriteLine("M=D")
+                                          .build();
+
+    codeBuilder_.Extend(setArg)
+                .Extend(PushRam("SP")) // push frame
+                .Extend(PushRam("LCL"))
+                .Extend(PushRam("ARG"))
+                .Extend(PushRam("THIS"))
+                .Extend(PushRam("THAT"))
+                .WriteLine("@SP") // LCL = SP
+                .WriteLine("D=M")
+                .WriteLine("@LCL")
+                .WriteLine("M=D")
+                .WriteLine("@" + tokens.funcName) // jump to funcName label
+                .WriteLine("0; JMP")
+                .WriteLine("(" + tokens.funcName + ".RET)"); // return label
+}
+
+void CodeWriter::DecodeReturn(ReturnTokens tokens, std::string funcName) 
+{
+    // *R13 = *(LCL - 5)
+    CodeBlock tempSaveSP = CodeBlock::Create().WriteLine("@5")
+                                              .WriteLine("D=A")
+                                              .WriteLine("LCL")
+                                              .WriteLine("A=A-D")
+                                              .WriteLine("D=M")
+                                              .WriteLine("@R13")
+                                              .WriteLine("M=D")
+                                              .build();
+
+    // *(LCL - 5) = *(SP - 1)
+    CodeBlock saveReturn = CodeBlock::Create().WriteLine("@SP")
+                                              .WriteLine("A=A-1")
+                                              .WriteLine("D=M")
+                                              .WriteLine("@R14")
+                                              .WriteLine("M=D")
+                                              .WriteLine("@5")
+                                              .WriteLine("D=A")
+                                              .WriteLine("LCL")
+                                              .WriteLine("A=A-D")
+                                              .WriteLine("@R15")
+                                              .WriteLine("M=A")
+                                              .WriteLine("@R14")
+                                              .WriteLine("D=M")
+                                              .WriteLine("@R15")
+                                              .WriteLine("M=D")
+                                              .build();
+
+    // restore
+    CodeBlock restoreFrame = RestoreBlock::CreateRestoreCodeBlock("R14");
+
+    // *SP = *R13
+    CodeBlock setSp = CodeBlock::Create().WriteLine("@R13")
+                                         .WriteLine("D=M")
+                                         .WriteLine("@SP")
+                                         .WriteLine("M=D")
+                                         .build();
+    codeBuilder_.Extend(tempSaveSP)
+                .Extend(saveReturn)
+                .Extend(restoreFrame)
+                .Extend(setSp)
+                .WriteLine("@" + funcName)
+                .WriteLine("0; JMP");
+
+    contextHandler_.SwitchContext(tokens.operationType, codeBuilder_);
+}
+
+CodeBlock CodeWriter::PushRam(std::string ram) 
+{
+    return CodeBlock::Create().WriteLine("@" + ram)
+                              .WriteLine("D=M")
+                              .Extend(stack_.PushFromD())
+                              .build();
 }
 
 std::string CodeWriter::GetComparisonOperator(OperationType operation)

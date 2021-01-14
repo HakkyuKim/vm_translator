@@ -1,7 +1,10 @@
 add_library(CODE_BLOCK CodeBlock.h 
                        CodeBlock.cc
                        CodeBlockBuilder.h
-                       CodeBlockBuilder.cc)
+                       CodeBlockBuilder.cc
+                       RestoreBlock.h
+                       RestoreBlock.cc)
+
 
 add_library(CONTEXT Context.h
                     ContextHandler.h
@@ -31,4 +34,17 @@ add_library(CODE_WRITER CodeWriter.h
 target_link_libraries(CODE_WRITER STACK_SEGMENT_TRANSLATOR VM_SEGMENT_TRANSLATOR CODE_BLOCK CONTEXT)
 
 add_library(LINE_READER LineReader.h LineReader.cc)
-add_library(PARSER Parser.h Parser.cc)
+
+add_library(PARSER Parser.h
+                   Parser.cc
+                   ParserBase.h
+                   ParserMemoryAccess.h
+                   ParserMemoryAccess.cc
+                   ParserArithmeticLogic.h
+                   ParserArithmeticLogic.cc
+                   ParserBranch.h
+                   ParserBranch.cc
+                   ParserFunction.h
+                   ParserFunction.cc
+                   ParserReturn.h
+                   ParserReturn.cc)

@@ -10,3 +10,5 @@ out\tests\Release\vm_translator.exe tests\project\07\StackArithmetic\StackTest\S
 
 out\tests\Release\vm_translator.exe tests\project\08\ProgramFlow\BasicLoop\BasicLoop.vm tests\project\08\ProgramFlow\BasicLoop\BasicLoop.asm
 out\tests\Release\vm_translator.exe tests\project\08\ProgramFlow\FibonacciSeries\FibonacciSeries.vm tests\project\08\ProgramFlow\FibonacciSeries\FibonacciSeries.asm
+
+REM out\tests\Release\vm_translator.exe tests\project\08\FunctionCalls\SimpleFunction\SimpleFunction.vm tests\project\08\FunctionCalls\SimpleFunction\SimpleFunction.asm

@@ -32,13 +32,13 @@ int main(int argc, char *argv[]){
     CodeWriter codeWriter(fileName);
 
     std::ofstream of = std::ofstream(outputFilePath);
-    while(!lineReader.IsEof()){
-        std::string vmCodeLine = lineReader.ReadNextLine();
-        ParseResult parseResult = parser.parse(vmCodeLine);
+    while(!lineReader.IsEof()){ // read by line
+        std::string vmCodeLine = lineReader.ReadNextLine(); // reader
+        ParseResult parseResult = parser.parse(vmCodeLine); // parser
         if(parseResult.parseType == ParseType::COMMENT || parseResult.parseType == ParseType::WHITESPACE){
             continue;
         }
-        codeWriter.Decode(*parseResult.tokens);
+        codeWriter.Decode(parseResult.tokens);
     }
     of << codeWriter.GenerateCode().String();
     return EXIT_SUCCESS;

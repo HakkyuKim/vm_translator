@@ -1,5 +1,34 @@
 #include <stdexcept>
 #include "Parser.h"
+#include <iostream>
+#include "ParserMemoryAccess.h"
+#include "ParserArithmeticLogic.h"
+#include "ParserBranch.h"
+#include "ParserFunction.h"
+#include "ParserReturn.h"
+
+Parser::Parser() 
+{
+    parsers_ = std::map<OperationType, std::shared_ptr<ParserBase>> {
+        {OperationType::POP, std::make_shared<ParserMemoryAccess>()},
+        {OperationType::PUSH, std::make_shared<ParserMemoryAccess>()},
+        {OperationType::ADD, std::make_shared<ParserArithmeticLogic>()},
+        {OperationType::SUB, std::make_shared<ParserArithmeticLogic>()},
+        {OperationType::NEG, std::make_shared<ParserArithmeticLogic>()},
+        {OperationType::EQ, std::make_shared<ParserArithmeticLogic>()},
+        {OperationType::LT, std::make_shared<ParserArithmeticLogic>()},
+        {OperationType::GT, std::make_shared<ParserArithmeticLogic>()},
+        {OperationType::AND, std::make_shared<ParserArithmeticLogic>()},
+        {OperationType::OR, std::make_shared<ParserArithmeticLogic>()},
+        {OperationType::NOT, std::make_shared<ParserArithmeticLogic>()},
+        {OperationType::LABEL, std::make_shared<ParserBranch>()},
+        {OperationType::GOTO, std::make_shared<ParserBranch>()},
+        {OperationType::IFGOTO, std::make_shared<ParserBranch>()},
+        {OperationType::FUNC, std::make_shared<ParserFunction>()},
+        {OperationType::CALL, std::make_shared<ParserFunction>()},
+        {OperationType::RETURN, std::make_shared<ParserReturn>()}
+    };
+}
 
 ParseResult Parser::parse(std::string vmCodeLine)
 {
@@ -14,19 +43,8 @@ ParseResult Parser::parse(std::string vmCodeLine)
         return ParseResult(true, ParseType::COMMENT, nullptr);
     };
 
-    OperationType operationType = GetOperationType(tokenStrings[0]);
-    if(operationType == OperationType::LABEL || 
-       operationType == OperationType::GOTO || 
-       operationType == OperationType::IFGOTO) {
-        return ParseResult(true, ParseType::CODE,
-                        new Tokens(operationType, defulatSegment, tokenStrings[1]));
-    }
-    else{
-        SegmentType segmentType = tokenStrings.size() >= 2 ? GetSegmentType(tokenStrings[1]) : defulatSegment;
-        std::string index = tokenStrings.size() >= 3 ? tokenStrings[2] : "0";
-        return ParseResult(true, ParseType::CODE,
-                       new Tokens(operationType, segmentType, index));
-    }
+    OperationType operationType = EnumUtil::getOperationType(tokenStrings[0]);
+    return ParseResult(true, ParseType::CODE, parsers_[operationType]->parse(operationType, tokenStrings));
 }
 
 std::vector<std::string> Parser::SplitBySpace(std::string line)
@@ -53,96 +71,3 @@ std::vector<std::string> Parser::SplitBySpace(std::string line)
     return tokens;
 }
 
-OperationType Parser::GetOperationType(std::string operationType)
-{
-    if (operationType == "push")
-    {
-        return OperationType::PUSH;
-    }
-    else if (operationType == "pop")
-    {
-        return OperationType::POP;
-    }
-    else if (operationType == "add")
-    {
-        return OperationType::ADD;
-    }
-    else if (operationType == "sub")
-    {
-        return OperationType::SUB;
-    }
-    else if(operationType == "eq"){
-        return OperationType::EQ;
-    }
-    else if(operationType == "lt"){
-        return OperationType::LT;
-    }
-    else if(operationType == "gt"){
-        return OperationType::GT;
-    }
-    else if(operationType == "neg"){
-        return OperationType::NEG;
-    }
-    else if(operationType == "not"){
-        return OperationType::NOT;
-    }
-    else if(operationType == "and"){
-        return OperationType::AND;
-    }
-    else if(operationType == "or"){
-        return OperationType::OR;
-    }
-    else if(operationType == "label"){
-        return OperationType::LABEL;
-    }
-    else if(operationType == "goto"){
-        return OperationType::GOTO;
-    }
-    else if(operationType == "if-goto"){
-        return OperationType::IFGOTO;
-    }
-    else
-    {
-        throw std::invalid_argument("Undefined operation type " + operationType + "\n");
-    }
-}
-
-SegmentType Parser::GetSegmentType(std::string segmentType)
-{
-    if (segmentType == "static")
-    {
-        return SegmentType::STATIC;
-    }
-    else if (segmentType == "local")
-    {
-        return SegmentType::LOCAL;
-    }
-    else if (segmentType == "argument")
-    {
-        return SegmentType::ARGUMENT;
-    }
-    else if (segmentType == "constant")
-    {
-        return SegmentType::CONSTANT;
-    }
-    else if (segmentType == "this")
-    {
-        return SegmentType::THIS;
-    }
-    else if (segmentType == "that")
-    {
-        return SegmentType::THAT;
-    }
-    else if (segmentType == "pointer")
-    {
-        return SegmentType::POINTER;
-    }
-    else if (segmentType == "temp")
-    {
-        return SegmentType::TEMP;
-    }
-    else
-    {
-        throw std::invalid_argument("Undefined virtual segment type " + segmentType + "\n");
-    }
-}

@@ -18,7 +18,7 @@ class CodeWriter{
     public:
     CodeWriter(std::string fileName);
     ~CodeWriter();
-    void Decode(Tokens tokens);
+    void Decode(std::shared_ptr<BaseTokens> tokens);
     uint32_t lineNumber;
     CodeBlock GenerateCode();
 
@@ -31,13 +31,18 @@ class CodeWriter{
 
     void DecodePushOperation(Tokens tokens);
     void DecodePopOperation(Tokens tokens);
-    void DecodeAddSubOperation(Tokens tokens);
-    void DecodeNegNotOperation(Tokens tokens);
-    void DecodeAndOrOperation(Tokens tokens);
-    void DecodeComparisonOperation(Tokens tokens, uint32_t lineNum);
+    void DecodeAddSubOperation(ArithmeticLogicalTokens tokens);
+    void DecodeNegNotOperation(ArithmeticLogicalTokens tokens);
+    void DecodeAndOrOperation(ArithmeticLogicalTokens tokens);
+    void DecodeComparisonOperation(ArithmeticLogicalTokens tokens, uint32_t lineNum);
     void DecodeLable(BranchTokens tokens);
     void DecodeGoto(BranchTokens tokens);
     void DecodeIfGoto(BranchTokens tokens);
+    void DecodeFuncDeclare(FuncTokens tokens);
+    void DecodeFuncCall(FuncTokens tokens);
+    void DecodeReturn(ReturnTokens tokens, std::string funcName);
+
+    CodeBlock PushRam(std::string ram);
 
     std::string GetComparisonOperator(OperationType operation);
     CodeBlock PlaceDToTempRegister(std::string symbol);

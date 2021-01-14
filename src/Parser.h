@@ -1,9 +1,9 @@
 #ifndef __PARSER_H__
 #define __PARSER_H__
 
-#include <string>
-#include <vector>
+#include <map>
 #include "types.h"
+#include "ParserBase.h"
 
 enum ParseType {
     UNDEFINED,
@@ -13,26 +13,21 @@ enum ParseType {
 };
 
 struct ParseResult {
-    ParseResult(bool success, ParseType parseType, Tokens *tokens)
+    ParseResult(bool success, ParseType parseType, std::shared_ptr<BaseTokens> tokens)
     :success(success), parseType(parseType), tokens(tokens){};
-    ~ParseResult(){
-        if(tokens != nullptr){
-            delete tokens;
-        }   
-    }
     bool success;
     ParseType parseType;
-    Tokens *tokens;
+    std::shared_ptr<BaseTokens> tokens;
 };
 
 class Parser
 {
 public:
+    Parser();
     ParseResult parse(std::string vmCodeLine);
-    private:
+private:
     std::vector<std::string> SplitBySpace(std::string line);
-    OperationType GetOperationType(std::string operationType);
-    SegmentType GetSegmentType(std::string segmentType);
+    std::map<OperationType, std::shared_ptr<ParserBase>> parsers_;
 };
 
 #endif // __PARSER_H__

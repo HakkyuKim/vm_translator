@@ -14,7 +14,7 @@ void ContextHandler::SaveFileContext(std::unique_ptr<CodeBlock> codeBlock)
 }
 
 // Creates a new 'FunctionContext' referred to by 'currentFuncContext'.
-void ContextHandler::CreateFunctionContext(std::string funcName, uint32_t nLocals) 
+void ContextHandler::CreateFunctionContext(std::string funcName, std::string nLocals) 
 {
     currentFuncContext_ = std::make_unique<FunctionContext>(
         currentFileContext_->fileName_,
@@ -40,6 +40,24 @@ void ContextHandler::SwitchContext(OperationType operationType, CodeBlockBuilder
         }
         SaveFileContext(std::move(ptr));
     }
+    else if(operationType == OperationType::RETURN){
+        CodeBlock codeBlock = codeBlockBuilder.build();
+        std::unique_ptr<CodeBlock> ptr = std::make_unique<CodeBlock>();
+        ptr->extend(codeBlock);
+        if(currentFuncContext_){
+            SaveFunctionContext(std::move(ptr));
+        }
+    }
+}
+
+std::string ContextHandler::GetCurrentFileName() 
+{
+    return currentFileContext_->fileName_;
+}
+
+std::string ContextHandler::GetCurrentFunctionName() 
+{
+    return currentFuncContext_->functionName_;
 }
 
 CodeBlock ContextHandler::Merge() 

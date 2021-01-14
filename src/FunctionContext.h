@@ -9,14 +9,14 @@ class ContextHandler;
 
 class FunctionContext : public Context {
     public:
-    FunctionContext(std::string fileName, std::string functionName, int nLocals);
+    FunctionContext(std::string fileName, std::string functionName, std::string nLocals);
     CodeBlock Merge() override;
     friend ContextHandler;
     friend FileContext;
     private:
     std::string fileName_;
     std::string functionName_;
-    int nLocals_;  
+    std::string nLocals_;  
 };
 
 #endif // __FUNCTIONCONTEXT_H__
