@@ -1,0 +1,23 @@
+Base:
+  Memory:
+    Push:
+    Pop:
+  Arithmetic:
+    Add:
+    Sub:
+    Neg:
+    Eq:
+    Lt:
+    Gt:
+  Logic:
+    And:
+    Or:
+    Not:
+  Branch:
+    Label:
+    GoTo:
+    IfGoTo:
+  Func:
+    Function:
+    Call:
+    Return:

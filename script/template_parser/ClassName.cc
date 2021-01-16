@@ -1,0 +1,5 @@
+#include "{%DERIVEDCLASS%}.h"
+
+{%DERIVEDCLASS%}::{%DERIVEDCLASS%}(){}
+
+{%DERIVEDCLASS%}::~{%DERIVEDCLASS%}(){}
