@@ -5,6 +5,7 @@ add_library(
     TokenMemory.cc
 )
 
+target_link_libraries(token_memory token_base)
 target_include_directories(token_memory PUBLIC 
 ${CMAKE_SOURCE_DIR}
 )

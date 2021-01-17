@@ -6,4 +6,5 @@ add_library(
     TokenBranch.cc
 )
 
+target_link_libraries(token_branch token_base)
 target_include_directories(token_branch PUBLIC ${CMAKE_SOURCE_DIR})

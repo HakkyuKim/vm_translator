@@ -5,3 +5,5 @@ add_library(token_func
                              TokenFunc.cc)
 
                              target_include_directories(token_func PUBLIC ${CMAKE_SOURCE_DIR})
+
+                             target_link_libraries(token_func token_base)

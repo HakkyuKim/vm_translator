@@ -4,9 +4,15 @@
 #add_subdirectory(decoder_logic)
 add_subdirectory(decoder_memory)
 
-add_library(sub_decoder DecoderBase.cc)
+add_library(decoder_base DecoderBase.cc)
+
+target_link_libraries(decoder_base token segment codeblock)
+target_include_directories(decoder_base PUBLIC ${CMAKE_SOURCE_DIR})
+
+add_library(sub_decoder INTERFACE)
 
 target_link_libraries(sub_decoder 
+INTERFACE
 #decoder_arithmetic
 #decoder_branch
 #decoder_func
@@ -14,4 +20,3 @@ target_link_libraries(sub_decoder
 decoder_memory
 )
 
-target_include_directories(sub_decoder PUBLIC ${CMAKE_SOURCE_DIR})
