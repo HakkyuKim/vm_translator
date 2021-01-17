@@ -1,6 +1,6 @@
 #include "ParserReturn.h"
 
-#include "TokenReturn.h"
+#include "src/token/token_func/TokenReturn.h"
 
 ParserReturn::ParserReturn() {}
 

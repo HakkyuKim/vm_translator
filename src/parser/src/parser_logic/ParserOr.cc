@@ -1,6 +1,6 @@
 #include "ParserOr.h"
 
-#include "TokenOr.h"
+#include "src/token/token_logic/TokenOr.h"
 
 ParserOr::ParserOr() {}
 

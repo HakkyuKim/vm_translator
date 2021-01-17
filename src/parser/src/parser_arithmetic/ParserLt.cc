@@ -1,6 +1,6 @@
 #include "ParserLt.h"
 
-#include "TokenLt.h"
+#include "src/token/token_arithmetic/TokenLt.h"
 
 ParserLt::ParserLt() {}
 

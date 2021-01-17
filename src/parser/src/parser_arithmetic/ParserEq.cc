@@ -1,6 +1,6 @@
 #include "ParserEq.h"
 
-#include "TokenEq.h"
+#include "src/token/token_arithmetic/TokenEq.h"
 
 ParserEq::ParserEq() {}
 

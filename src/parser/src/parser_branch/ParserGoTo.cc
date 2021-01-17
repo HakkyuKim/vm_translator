@@ -1,6 +1,6 @@
 #include "ParserGoTo.h"
 
-#include "TokenGoTo.h"
+#include "src/token/token_branch/TokenGoTo.h"
 
 ParserGoTo::ParserGoTo() {}
 

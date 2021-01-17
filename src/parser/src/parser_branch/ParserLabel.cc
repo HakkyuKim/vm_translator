@@ -1,6 +1,6 @@
 #include "ParserLabel.h"
 
-#include "TokenLabel.h"
+#include "src/token/token_branch/TokenLabel.h"
 
 ParserLabel::ParserLabel() {}
 

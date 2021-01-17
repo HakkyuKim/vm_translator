@@ -3,43 +3,43 @@
 #include <iostream>
 #include <stdexcept>
 
-#include "ParserAdd.h"
-#include "ParserAnd.h"
-#include "ParserCall.h"
-#include "ParserEq.h"
-#include "ParserFunction.h"
-#include "ParserGoTo.h"
-#include "ParserGt.h"
-#include "ParserIfGoTo.h"
-#include "ParserLabel.h"
-#include "ParserLt.h"
-#include "ParserNeg.h"
-#include "ParserNot.h"
-#include "ParserOr.h"
-#include "ParserPop.h"
-#include "ParserPush.h"
-#include "ParserReturn.h"
-#include "ParserSub.h"
+#include "src/parser_arithmetic/ParserAdd.h"
+#include "src/parser_arithmetic/ParserEq.h"
+#include "src/parser_arithmetic/ParserGt.h"
+#include "src/parser_arithmetic/ParserLt.h"
+#include "src/parser_arithmetic/ParserNeg.h"
+#include "src/parser_arithmetic/ParserSub.h"
+#include "src/parser_branch/ParserGoTo.h"
+#include "src/parser_branch/ParserIfGoTo.h"
+#include "src/parser_branch/ParserLabel.h"
+#include "src/parser_func/ParserCall.h"
+#include "src/parser_func/ParserFunction.h"
+#include "src/parser_func/ParserReturn.h"
+#include "src/parser_logic/ParserAnd.h"
+#include "src/parser_logic/ParserNot.h"
+#include "src/parser_logic/ParserOr.h"
+#include "src/parser_memory/ParserPop.h"
+#include "src/parser_memory/ParserPush.h"
 
 Parser::Parser() {
-  parsers_ = std::map<OperationType, std::unique_ptr<ParserBase>>{
-      {OperationType::POP, std::make_unique<ParserPop>()},
-      {OperationType::PUSH, std::make_unique<ParserPush>()},
-      {OperationType::ADD, std::make_unique<ParserAdd>()},
-      {OperationType::SUB, std::make_unique<ParserSub>()},
-      {OperationType::NEG, std::make_unique<ParserNeg>()},
-      {OperationType::EQ, std::make_unique<ParserEq>()},
-      {OperationType::LT, std::make_unique<ParserLt>()},
-      {OperationType::GT, std::make_unique<ParserGt>()},
-      {OperationType::AND, std::make_unique<ParserAnd>()},
-      {OperationType::OR, std::make_unique<ParserOr>()},
-      {OperationType::NOT, std::make_unique<ParserNot>()},
-      {OperationType::LABEL, std::make_unique<ParserLabel>()},
-      {OperationType::GOTO, std::make_unique<ParserGoTo>()},
-      {OperationType::IFGOTO, std::make_unique<ParserIfGoTo>()},
-      {OperationType::FUNC, std::make_unique<ParserFunc>()},
-      {OperationType::CALL, std::make_unique<ParserCall>()},
-      {OperationType::RETURN, std::make_unique<ParserReturn>()}};
+  parsers_ = std::map<OperationType, std::shared_ptr<ParserBase>>{
+      {OperationType::POP, std::make_shared<ParserPop>()},
+      {OperationType::PUSH, std::make_shared<ParserPush>()},
+      {OperationType::ADD, std::make_shared<ParserAdd>()},
+      {OperationType::SUB, std::make_shared<ParserSub>()},
+      {OperationType::NEG, std::make_shared<ParserNeg>()},
+      {OperationType::EQ, std::make_shared<ParserEq>()},
+      {OperationType::LT, std::make_shared<ParserLt>()},
+      {OperationType::GT, std::make_shared<ParserGt>()},
+      {OperationType::AND, std::make_shared<ParserAnd>()},
+      {OperationType::OR, std::make_shared<ParserOr>()},
+      {OperationType::NOT, std::make_shared<ParserNot>()},
+      {OperationType::LABEL, std::make_shared<ParserLabel>()},
+      {OperationType::GOTO, std::make_shared<ParserGoTo>()},
+      {OperationType::IFGOTO, std::make_shared<ParserIfGoTo>()},
+      {OperationType::FUNC, std::make_shared<ParserFunction>()},
+      {OperationType::CALL, std::make_shared<ParserCall>()},
+      {OperationType::RETURN, std::make_shared<ParserReturn>()}};
 }
 
 void Parser::SetFile(std::string fileName) {

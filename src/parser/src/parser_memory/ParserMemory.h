@@ -1,7 +1,7 @@
 #ifndef __PARSERMEMORY_H__
 #define __PARSERMEMORY_H__
 
-#include "ParserBase.h"
+#include "src/parser/src/ParserBase.h"
 
 class ParserMemory : public ParserBase {
  public:

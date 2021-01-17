@@ -1,7 +1,7 @@
 #include "ParserPop.h"
 
-#include "SegmentType.h"
-#include "TokenPop.h"
+#include "src/token/token_memory/TokenPop.h"
+#include "src/type/SegmentType.h"
 
 ParserPop::ParserPop() {}
 

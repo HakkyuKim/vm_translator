@@ -1,7 +1,7 @@
 #include "ParserPush.h"
 
-#include "SegmentType.h"
-#include "TokenPush.h"
+#include "src/token/token_memory/TokenPush.h"
+#include "src/type/SegmentType.h"
 
 ParserPush::ParserPush() {}
 

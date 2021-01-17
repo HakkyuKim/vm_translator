@@ -1,6 +1,6 @@
 #include "ParserNeg.h"
 
-#include "TokenNeg.h"
+#include "src/token/token_arithmetic/TokenNeg.h"
 
 ParserNeg::ParserNeg() {}
 

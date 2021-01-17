@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "TokenBase.h"
+#include "src/token/TokenBase.h"
 
 enum ParseType { UNDEFINED, WHITESPACE, CODE, COMMENT };
 

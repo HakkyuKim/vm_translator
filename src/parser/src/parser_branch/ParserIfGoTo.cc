@@ -1,6 +1,6 @@
 #include "ParserIfGoTo.h"
 
-#include "TokenIfGoTo.h"
+#include "src/token/token_branch/TokenIfGoTo.h"
 
 ParserIfGoTo::ParserIfGoTo() {}
 

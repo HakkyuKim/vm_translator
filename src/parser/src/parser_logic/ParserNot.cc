@@ -1,6 +1,6 @@
 #include "ParserNot.h"
 
-#include "TokenNot.h"
+#include "src/token/token_logic/TokenNot.h"
 
 ParserNot::ParserNot() {}
 

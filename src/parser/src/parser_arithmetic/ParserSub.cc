@@ -1,6 +1,6 @@
 #include "ParserSub.h"
 
-#include "TokenSub.h"
+#include "src/token/token_arithmetic/TokenSub.h"
 
 ParserSub::ParserSub() {}
 

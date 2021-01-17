@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-#include "../token/TokenBase.h"
+#include "src/token/TokenBase.h"
 
 class ParserBase {
  public:

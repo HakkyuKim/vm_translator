@@ -1,6 +1,6 @@
 #include "ParserFunction.h"
 
-#include "TokenFunction.h"
+#include "src/token/token_func/TokenFunction.h"
 
 ParserFunction::ParserFunction() {}
 

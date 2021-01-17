@@ -1,6 +1,6 @@
 #include "ParserGt.h"
 
-#include "TokenGt.h"
+#include "src/token/token_arithmetic/TokenGt.h"
 
 ParserGt::ParserGt() {}
 

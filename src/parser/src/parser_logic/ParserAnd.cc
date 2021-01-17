@@ -1,6 +1,6 @@
 #include "ParserAnd.h"
 
-#include "TokenAnd.h"
+#include "src/token/token_logic/TokenAnd.h"
 
 ParserAnd::ParserAnd() {}
 

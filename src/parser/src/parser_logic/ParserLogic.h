@@ -1,7 +1,7 @@
 #ifndef __PARSERLOGIC_H__
 #define __PARSERLOGIC_H__
 
-#include "ParserBase.h"
+#include "src/parser/src/ParserBase.h"
 
 class ParserLogic : public ParserBase {
  public:
