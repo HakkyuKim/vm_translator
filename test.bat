@@ -12,3 +12,5 @@ out\tests\Release\vm_translator.exe tests\project\08\ProgramFlow\BasicLoop\Basic
 out\tests\Release\vm_translator.exe tests\project\08\ProgramFlow\FibonacciSeries\FibonacciSeries.vm tests\project\08\ProgramFlow\FibonacciSeries\FibonacciSeries.asm
 
 REM out\tests\Release\vm_translator.exe tests\project\08\FunctionCalls\SimpleFunction\SimpleFunction.vm tests\project\08\FunctionCalls\SimpleFunction\SimpleFunction.asm
+
+python3 validate.py
