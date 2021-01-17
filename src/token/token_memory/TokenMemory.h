@@ -3,8 +3,8 @@
 
 #include <string>
 
-#include "SegmentType.h"
-#include "TokenBase.h"
+#include "src/token/TokenBase.h"
+#include "src/type/SegmentType.h"
 
 class TokenMemory : public TokenBase {
  public:

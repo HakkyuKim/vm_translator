@@ -1,7 +1,7 @@
 #ifndef __TOKENARITHMETIC_H__
 #define __TOKENARITHMETIC_H__
 
-#include "TokenBase.h"
+#include "src/token/TokenBase.h"
 
 class TokenArithmetic : public TokenBase {
  public:

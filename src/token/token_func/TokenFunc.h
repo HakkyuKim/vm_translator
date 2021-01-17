@@ -1,7 +1,7 @@
 #ifndef __TOKENFUNC_H__
 #define __TOKENFUNC_H__
 
-#include "TokenBase.h"
+#include "src/token/TokenBase.h"
 
 class TokenFunc : public TokenBase {
  public:

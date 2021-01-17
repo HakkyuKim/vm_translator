@@ -1,7 +1,7 @@
 #ifndef __TOKENBASE_H__
 #define __TOKENBASE_H__
 
-#include "OperationType.h"
+#include "src/type/OperationType.h"
 
 class TokenBase {
  public:

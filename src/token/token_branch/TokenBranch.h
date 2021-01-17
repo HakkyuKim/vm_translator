@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "TokenBase.h"
+#include "src/token/TokenBase.h"
 
 class TokenBranch : public TokenBase {
  public:

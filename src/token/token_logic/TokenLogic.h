@@ -1,7 +1,7 @@
 #ifndef __TOKENLOGIC_H__
 #define __TOKENLOGIC_H__
 
-#include "TokenBase.h"
+#include "src/token/TokenBase.h"
 
 class TokenLogic : public TokenBase {
  public:
