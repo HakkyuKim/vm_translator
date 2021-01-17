@@ -2,6 +2,10 @@
 
 #include <utility>
 
+CodeBlockBuilder::CodeBlockBuilder() {
+  codeBlock_ = std::make_unique<CodeBlock>();
+}
+
 CodeBlockBuilder& CodeBlockBuilder::WriteLine(std::string line) {
   codeBlock_->codes_.push_back(line);
   return *this;
@@ -15,7 +19,7 @@ CodeBlockBuilder& CodeBlockBuilder::Extend(CodeBlock codeBlock) {
 std::unique_ptr<CodeBlock> CodeBlockBuilder::build() {
   std::unique_ptr<CodeBlock> tempPtr = std::move(codeBlock_);
   codeBlock_ = std::make_unique<CodeBlock>();
-  return std::move(tempPtr);
+  return tempPtr;
 }
 
 uint32_t CodeBlockBuilder::GetLineNumbers() {

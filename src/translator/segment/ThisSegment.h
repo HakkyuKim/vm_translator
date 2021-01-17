@@ -8,8 +8,6 @@ class ThisSegment : public VmSegment {
   ThisSegment(std::shared_ptr<CodeBlockBuilder> CodeBlockBuilder,
               std::string symbol = "THIS");
   virtual ~ThisSegment();
-  virtual void Push(std::shared_ptr<StackSegment> globalStack, std::string);
-  virtual void Pop(std::shared_ptr<StackSegment> globalStack, std::string);
 
  private:
 };

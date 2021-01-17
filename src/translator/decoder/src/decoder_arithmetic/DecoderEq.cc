@@ -5,3 +5,7 @@ DecoderEq::DecoderEq(std::shared_ptr<CodeBlockBuilder> codeBlockBuilder,
     : DecoderArithmetic(codeBlockBuilder, decoderState) {}
 
 DecoderEq::~DecoderEq() {}
+
+void DecoderEq::Decode(std::unique_ptr<TokenBase> token) {
+  DecodeCompare("JEQ");
+}

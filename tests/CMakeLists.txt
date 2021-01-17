@@ -1,7 +1,9 @@
-add_executable(TEST main.cc)
+add_subdirectory(libtest)
 
-add_subdirectory(unittest)
+#add_executable(TEST main.cc)
 
-target_include_directories(TEST PUBLIC unittest)
-target_link_directories(TEST PUBLIC unittest)
-target_link_libraries(TEST UNIT_TESTS)
+#add_subdirectory(unittest)
+
+#target_include_directories(TEST PUBLIC unittest)
+#target_link_directories(TEST PUBLIC unittest)
+#target_link_libraries(TEST UNIT_TESTS)

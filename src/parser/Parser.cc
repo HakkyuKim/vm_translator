@@ -54,13 +54,13 @@ bool Parser::IsEof() { return lineReader_.IsEof(); }
 ParseResult Parser::ParseNextLine() {
   std::vector<std::string> tokenStrings =
       SplitBySpace(lineReader_.ReadNextLine());
+
   if (tokenStrings.empty()) {
     return ParseResult(true, ParseType::WHITESPACE, nullptr);
   }
   if (tokenStrings[0] == "//") {
     return ParseResult(true, ParseType::COMMENT, nullptr);
-  };
-
+  }
   OperationType operationType =
       OperationTypeUtil::getOperationType(tokenStrings[0]);
   return ParseResult(true, ParseType::CODE,

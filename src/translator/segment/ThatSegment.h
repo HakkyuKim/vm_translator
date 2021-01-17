@@ -8,8 +8,6 @@ class ThatSegment : public VmSegment {
   ThatSegment(std::shared_ptr<CodeBlockBuilder> codeBlockBuilder,
               std::string symbol = "THAT");
   virtual ~ThatSegment();
-  void Push(std::shared_ptr<StackSegment> globalStack, std::string) override;
-  void Pop(std::shared_ptr<StackSegment> globalStack, std::string) override;
 
  private:
 };

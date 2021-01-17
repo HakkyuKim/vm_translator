@@ -14,12 +14,12 @@
 class Decoder {
  public:
   Decoder();
-  DecodeResult FeedLine(std::unique_ptr<TokenBase> token);
+  std::unique_ptr<DecodeResult> FeedLine(std::unique_ptr<TokenBase> token);
   void SetFile(std::string fileName);
-  DecodeResult CloseFile();
+  std::unique_ptr<DecodeResult> CloseFile();
 
  private:
-  DecodeResult PackageDecodeResult();
+  std::unique_ptr<DecodeResult> PackageDecodeResult();
   std::map<OperationType, std::shared_ptr<DecoderBase>> decoders_;
   std::shared_ptr<DecoderState> decoderState_;
   std::shared_ptr<CodeBlockBuilder> codeBlockbuilder_;

@@ -1,5 +1,7 @@
 #include "DecodeResult.h"
 
+#include <iostream>
+
 DecodeResult::DecodeResult(bool hasCodeBlock, bool isFunction,
                            std::unique_ptr<CodeBlock> codeBlock,
                            std::string fileName, std::string funcName)

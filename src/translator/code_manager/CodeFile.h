@@ -10,7 +10,7 @@ class CodeFile {
   void AddCodeFunction(std::string funcName,
                        std::unique_ptr<CodeBlock> codeBlcok);
   void AddCodeBlock(std::unique_ptr<CodeBlock> codeBlock);
-  CodeBlock* Merge();
+  CodeBlock Merge();
 
  private:
   std::unique_ptr<CodeBlock> codeBlock_;

@@ -8,8 +8,10 @@ class DecoderArithmetic : public DecoderBase {
   DecoderArithmetic(std::shared_ptr<CodeBlockBuilder> codeBlockBuilder,
                     std::shared_ptr<DecoderState> decoderState);
   virtual ~DecoderArithmetic();
+  void DecodeCompare(std::string operation);
 
  private:
+  static uint32_t compareCnt_;
 };
 
 #endif  // __DECODERARITHMETIC_H__

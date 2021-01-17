@@ -20,4 +20,4 @@ std::string DecoderState::NextReturnAddressCnt() {
 
 bool DecoderState::isCodeReturnable() { return true; }
 
-bool DecoderState::isFunction() { return true; }
+bool DecoderState::isFunction() { return false; }

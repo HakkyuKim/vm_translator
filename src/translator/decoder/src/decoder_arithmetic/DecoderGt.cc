@@ -5,3 +5,7 @@ DecoderGt::DecoderGt(std::shared_ptr<CodeBlockBuilder> codeBlockBuilder,
     : DecoderArithmetic(codeBlockBuilder, decoderState) {}
 
 DecoderGt::~DecoderGt() {}
+
+void DecoderGt::Decode(std::unique_ptr<TokenBase> token) {
+  DecodeCompare("JGT");
+}

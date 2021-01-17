@@ -8,7 +8,7 @@ class DecoderSub : public DecoderArithmetic {
   DecoderSub(std::shared_ptr<CodeBlockBuilder> codeBlockBuilder,
              std::shared_ptr<DecoderState> decoderState);
   virtual ~DecoderSub();
-  void Decode(TokenBase token) override;
+  void Decode(std::unique_ptr<TokenBase> token) override;
 
  private:
 };

@@ -13,7 +13,7 @@ class CodeManager {
                          std::unique_ptr<CodeBlock> codeBlock);
   void AddCodeToCodeFunction(std::string fileName, std::string funcName,
                              std::unique_ptr<CodeBlock> codeBlock);
-  CodeBlock* Merge();
+  CodeBlock Merge();
 
  private:
   std::map<std::string, std::unique_ptr<CodeFile>> codeFiles_;

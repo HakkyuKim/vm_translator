@@ -1,7 +1,7 @@
 #ifndef __DECODERLOGIC_H__
 #define __DECODERLOGIC_H__
 
-#include "DecoderBase.h"
+#include "src/translator/decoder/src/DecoderBase.h"
 
 class DecoderLogic : public DecoderBase {
  public:
