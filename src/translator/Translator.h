@@ -15,11 +15,13 @@ class Translator {
   void CloseFile();
   void SetFile(std::string fileName);
   std::string Code();
+  std::string GetBootStrap(std::string initialStackAddr);
   void ProcessDecodeResult();
 
  private:
   Decoder decoder_;
   CodeManager codeManager_;
+  std::unique_ptr<CodeBlock> bootstrap_;
 };
 
 #endif  // __CODEWRITER_H__

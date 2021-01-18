@@ -1,16 +1,21 @@
 #include "LineReader.h"
+
 #include <iostream>
 
 LineReader::LineReader() {}
 
 LineReader::~LineReader() {}
 
-void LineReader::SetFile(std::string fileName) { fileName_ = fileName; }
+void LineReader::SetFile(std::string fileName) {
+  fileName_ = fileName;
+  stream_.clear();
+  stream_.close();
+}
 
 std::string LineReader::ReadNextLine() {
-  if(!stream_.is_open()){
+  if (!stream_.is_open()) {
     stream_.open(fileName_);
-    if(stream_.fail()){
+    if (stream_.fail()) {
       throw std::logic_error("Error: failed to open file " + fileName_ + "\n");
     }
   }
@@ -18,7 +23,6 @@ std::string LineReader::ReadNextLine() {
   while (stream_.good()) {
     char c = stream_.get();
     if (c == '\n' || c == EOF) {
-      std::cout << line << "\n";
       return line;
     }
     line.push_back(c);

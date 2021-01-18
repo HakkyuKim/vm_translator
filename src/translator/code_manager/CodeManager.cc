@@ -21,15 +21,15 @@ void CodeManager::AddCodeToCodeFunction(std::string fileName,
 }
 
 CodeBlock CodeManager::Merge() {
-  std::unique_ptr<CodeBlock> bootCodeBlock = std::make_unique<CodeBlock>();
+  std::unique_ptr<CodeBlock> asmCodeBlock = std::make_unique<CodeBlock>();
   std::unique_ptr<CodeBlock> codeBlock = std::make_unique<CodeBlock>();
   for (auto& item : codeFiles_) {
     if (item.first == "Sys.vm" || item.first == "Sys") {
-      bootCodeBlock->extend(item.second->Merge());
+      asmCodeBlock->extend(item.second->Merge());
     } else {
       codeBlock->extend(item.second->Merge());
     }
   }
-  bootCodeBlock->extend(*codeBlock);
-  return *bootCodeBlock;
+  asmCodeBlock->extend(*codeBlock);
+  return *asmCodeBlock;
 }

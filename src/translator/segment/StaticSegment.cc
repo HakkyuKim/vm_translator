@@ -1,23 +1,22 @@
 #include "StaticSegment.h"
 
 StaticSegment::StaticSegment(std::shared_ptr<CodeBlockBuilder> codeBlockBuilder,
+                             std::shared_ptr<DecoderState> decoderState,
                              std::string symbol)
-    : VmSegment(codeBlockBuilder, symbol) {}
+    : decoderState_(decoderState), VmSegment(codeBlockBuilder, symbol) {}
 
 StaticSegment::~StaticSegment() {}
 
 void StaticSegment::Push(std::shared_ptr<StackSegment> globalStack,
                          std::string offset) {
-  std::string ram = fileName_ + "." + offset;
-  CopyRamToD(ram);
+  std::string staticSymbol = decoderState_->GetFileName() + "." + offset;
+  CopyRamToD(staticSymbol);
   globalStack->PushFromD();
 }
 
 void StaticSegment::Pop(std::shared_ptr<StackSegment> globalStack,
                         std::string offset) {
-  std::string ram = fileName_ + "." + offset;
+  std::string staticSymbol = decoderState_->GetFileName() + "." + offset;
   globalStack->PopToD();
-  CopyDToRam(ram);
+  CopyDToRam(staticSymbol);
 }
-
-void StaticSegment::SetFileName(std::string fileName) { fileName_ = fileName; }

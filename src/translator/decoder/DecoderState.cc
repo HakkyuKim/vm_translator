@@ -1,5 +1,7 @@
 #include "DecoderState.h"
 
+#include <stdexcept>
+
 DecoderState::DecoderState(std::shared_ptr<CodeBlockBuilder> codeBlockBuilder)
     : codeBlockBuilder_(codeBlockBuilder),
       returnAddressCnt_(static_cast<uint32_t>(0)),
@@ -23,7 +25,7 @@ std::string DecoderState::GetFuncName() {
 }
 
 std::string DecoderState::NextReturnAddress() {
-  return funcName_ + ".RET$" + std::to_string(++returnAddressCnt_);
+  return funcName_ + "$ret." + std::to_string(++returnAddressCnt_);
 }
 
 bool DecoderState::IsResultEmpty() { return results_.empty(); }
