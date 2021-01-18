@@ -1,4 +1,4 @@
-add_subdirectory(libtest)
+#add_subdirectory(libtest)
 
 #add_executable(TEST main.cc)
 

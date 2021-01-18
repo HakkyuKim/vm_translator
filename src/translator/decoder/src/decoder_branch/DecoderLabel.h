@@ -8,7 +8,7 @@ class DecoderLabel : public DecoderBranch {
   DecoderLabel(std::shared_ptr<CodeBlockBuilder> codeBlockBuilder,
                std::shared_ptr<DecoderState> decoderState);
   virtual ~DecoderLabel();
-  void Decode(TokenBase token) override;
+  void Decode(std::unique_ptr<TokenBase> token) override;
 
  private:
 };

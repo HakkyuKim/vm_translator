@@ -8,6 +8,9 @@
 #include "src/translator/decoder/src/decoder_arithmetic/DecoderLt.h"
 #include "src/translator/decoder/src/decoder_arithmetic/DecoderNeg.h"
 #include "src/translator/decoder/src/decoder_arithmetic/DecoderSub.h"
+#include "src/translator/decoder/src/decoder_branch/DecoderGoTo.h"
+#include "src/translator/decoder/src/decoder_branch/DecoderIfGoTo.h"
+#include "src/translator/decoder/src/decoder_branch/DecoderLabel.h"
 #include "src/translator/decoder/src/decoder_logic/DecoderAnd.h"
 #include "src/translator/decoder/src/decoder_logic/DecoderNot.h"
 #include "src/translator/decoder/src/decoder_logic/DecoderOr.h"
@@ -40,6 +43,12 @@ Decoder::Decoder() {
        std::make_shared<DecoderOr>(codeBlockbuilder_, decoderState_)},
       {OperationType::NOT,
        std::make_shared<DecoderNot>(codeBlockbuilder_, decoderState_)},
+      {OperationType::LABEL,
+       std::make_shared<DecoderLabel>(codeBlockbuilder_, decoderState_)},
+      {OperationType::GOTO,
+       std::make_shared<DecoderGoTo>(codeBlockbuilder_, decoderState_)},
+      {OperationType::IFGOTO,
+       std::make_shared<DecoderIfGoTo>(codeBlockbuilder_, decoderState_)},
   };
 }
 

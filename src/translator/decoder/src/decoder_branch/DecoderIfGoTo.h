@@ -8,7 +8,7 @@ class DecoderIfGoTo : public DecoderBranch {
   DecoderIfGoTo(std::shared_ptr<CodeBlockBuilder> codeBlockBuilder,
                 std::shared_ptr<DecoderState> decoderState);
   virtual ~DecoderIfGoTo();
-  void Decode(TokenBase token) override;
+  void Decode(std::unique_ptr<TokenBase> token) override;
 
  private:
 };
