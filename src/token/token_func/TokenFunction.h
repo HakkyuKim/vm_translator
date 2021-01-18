@@ -8,10 +8,10 @@
 class TokenFunction : public TokenFunc {
  public:
   TokenFunction(OperationType operationType, std::string funcName,
-                std::string nArgs);
+                std::string nLocals);
   virtual ~TokenFunction();
   std::string funcName;
-  std::string nArgs;
+  std::string nLocals;
 };
 
 #endif  // __TOKENFUNCTION_H__

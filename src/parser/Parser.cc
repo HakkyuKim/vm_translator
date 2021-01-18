@@ -37,7 +37,7 @@ Parser::Parser() {
       {OperationType::LABEL, std::make_shared<ParserLabel>()},
       {OperationType::GOTO, std::make_shared<ParserGoTo>()},
       {OperationType::IFGOTO, std::make_shared<ParserIfGoTo>()},
-      {OperationType::FUNC, std::make_shared<ParserFunction>()},
+      {OperationType::FUNCTION, std::make_shared<ParserFunction>()},
       {OperationType::CALL, std::make_shared<ParserCall>()},
       {OperationType::RETURN, std::make_shared<ParserReturn>()}};
 }

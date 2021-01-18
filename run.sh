@@ -7,3 +7,5 @@ out/src/driver tests/project/07/MemoryAccess/PointerTest/PointerTest.vm tests/pr
 
 out/src/driver tests/project/08/ProgramFlow/BasicLoop/BasicLoop.vm tests/project/08/ProgramFlow/BasicLoop/BasicLoop.asm
 out/src/driver tests/project/08/ProgramFlow/FibonacciSeries/FibonacciSeries.vm tests/project/08/ProgramFlow/FibonacciSeries/FibonacciSeries.asm
+
+out/src/driver tests/project/08/FunctionCalls/SimpleFunction/SimpleFunction.vm tests/project/08/FunctionCalls/SimpleFunction/SimpleFunction.asm

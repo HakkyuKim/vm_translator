@@ -8,10 +8,10 @@
 class TokenCall : public TokenFunc {
  public:
   TokenCall(OperationType operationType, std::string funcName,
-            std::string nLocals);
+            std::string nArgs);
   virtual ~TokenCall();
   std::string funcName;
-  std::string nLocals;
+  std::string nArgs;
 };
 
 #endif  // __TOKENCALL_H__

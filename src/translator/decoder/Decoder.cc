@@ -11,6 +11,8 @@
 #include "src/translator/decoder/src/decoder_branch/DecoderGoTo.h"
 #include "src/translator/decoder/src/decoder_branch/DecoderIfGoTo.h"
 #include "src/translator/decoder/src/decoder_branch/DecoderLabel.h"
+#include "src/translator/decoder/src/decoder_func/DecoderFunction.h"
+#include "src/translator/decoder/src/decoder_func/DecoderReturn.h"
 #include "src/translator/decoder/src/decoder_logic/DecoderAnd.h"
 #include "src/translator/decoder/src/decoder_logic/DecoderNot.h"
 #include "src/translator/decoder/src/decoder_logic/DecoderOr.h"
@@ -49,6 +51,10 @@ Decoder::Decoder() {
        std::make_shared<DecoderGoTo>(codeBlockbuilder_, decoderState_)},
       {OperationType::IFGOTO,
        std::make_shared<DecoderIfGoTo>(codeBlockbuilder_, decoderState_)},
+      {OperationType::FUNCTION,
+       std::make_shared<DecoderFunction>(codeBlockbuilder_, decoderState_)},
+      {OperationType::RETURN,
+       std::make_shared<DecoderReturn>(codeBlockbuilder_, decoderState_)},
   };
 }
 

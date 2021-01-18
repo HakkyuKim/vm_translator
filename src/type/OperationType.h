@@ -5,23 +5,23 @@
 #include <string>
 
 enum OperationType {
-  PUSH,    // push segment value
-  POP,     // pop segment value
-  ADD,     // add
-  SUB,     // sub
-  NEG,     // neg
-  EQ,      // eq
-  LT,      // lt
-  GT,      // gt
-  AND,     // and
-  OR,      // or
-  NOT,     // not
-  LABEL,   // label labelName
-  GOTO,    // goto labelName
-  IFGOTO,  // if-goto labelName
-  FUNC,    // function funcName n
-  CALL,    // call funcName n
-  RETURN,  // return
+  PUSH,      // push segment value
+  POP,       // pop segment value
+  ADD,       // add
+  SUB,       // sub
+  NEG,       // neg
+  EQ,        // eq
+  LT,        // lt
+  GT,        // gt
+  AND,       // and
+  OR,        // or
+  NOT,       // not
+  LABEL,     // label labelName
+  GOTO,      // goto labelName
+  IFGOTO,    // if-goto labelName
+  FUNCTION,  // function funcName n
+  CALL,      // call funcName n
+  RETURN,    // return
 };
 
 class OperationTypeUtil {
@@ -56,7 +56,7 @@ class OperationTypeUtil {
     } else if (operationType == "if-goto") {
       return OperationType::IFGOTO;
     } else if (operationType == "function") {
-      return OperationType::FUNC;
+      return OperationType::FUNCTION;
     } else if (operationType == "call") {
       return OperationType::CALL;
     } else if (operationType == "return") {

@@ -1,7 +1,7 @@
 #include "TokenFunction.h"
 
 TokenFunction::TokenFunction(OperationType operationType, std::string funcName,
-                             std::string nArgs)
-    : funcName(funcName), nArgs(nArgs), TokenFunc(operationType) {}
+                             std::string nLocals)
+    : funcName(funcName), nLocals(nLocals), TokenFunc(operationType) {}
 
 TokenFunction::~TokenFunction() {}
