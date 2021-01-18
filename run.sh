@@ -9,3 +9,6 @@ out/src/driver tests/project/08/ProgramFlow/BasicLoop/BasicLoop.vm tests/project
 out/src/driver tests/project/08/ProgramFlow/FibonacciSeries/FibonacciSeries.vm tests/project/08/ProgramFlow/FibonacciSeries/FibonacciSeries.asm
 
 out/src/driver tests/project/08/FunctionCalls/SimpleFunction/SimpleFunction.vm tests/project/08/FunctionCalls/SimpleFunction/SimpleFunction.asm
+out/src/driver tests/project/08/FunctionCalls/FibonacciElement/Main.vm tests/project/08/FunctionCalls/FibonacciElement/Main.asm
+out/src/driver tests/project/08/FunctionCalls/FibonacciElement/Sys.vm tests/project/08/FunctionCalls/FibonacciElement/Sys.asm
+out/src/driver tests/project/08/FunctionCalls/NestedCall/Sys.vm tests/project/08/FunctionCalls/NestedCall/NestedCall.asm

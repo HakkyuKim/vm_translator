@@ -14,7 +14,7 @@ class CodeBlock {
   CodeBlock(std::initializer_list<std::string> initializer);
   void WriteLine(std::string codeLine);
   void extend(CodeBlock codeBlock);
-  uint32_t GetNumberOfLines();
+  bool IsEmpty();
   std::string String();
   void ReplaceWhere(std::vector<std::string> replacements);
 

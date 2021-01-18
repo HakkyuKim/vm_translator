@@ -14,16 +14,20 @@ void Translator::FeedLine(std::unique_ptr<TokenBase> token) {
 
 void Translator::CloseFile() {
   std::cout << "closing file\n";
-  std::unique_ptr<DecodeResult> result = decoder_.CloseFile();
-  if (result->hasCodeBlock) {
-    if (result->isFunction) {
-      codeManager_.AddCodeToCodeFunction(result->fileName, result->funcName,
-                                         std::move(result->codeBlock));
-    } else {
-      std::cout << result->fileName << "\n";
-      // std::cout << result->codeBlock->String() << "\n";
-      codeManager_.AddCodeToCodeFile(result->fileName,
-                                     std::move(result->codeBlock));
+  decoder_.CloseFile();
+}
+
+void Translator::ProcessDecodeResult() {
+  while (!decoder_.IsResultEmpty()) {
+    std::shared_ptr<DecodeResult> result = decoder_.Poll();
+    if (result->hasCodeBlock) {
+      if (result->isFunction) {
+        codeManager_.AddCodeToCodeFunction(result->fileName, result->funcName,
+                                           std::move(result->codeBlock));
+      } else {
+        codeManager_.AddCodeToCodeFile(result->fileName,
+                                       std::move(result->codeBlock));
+      }
     }
   }
 }

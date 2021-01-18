@@ -8,12 +8,12 @@ DecoderIfGoTo::DecoderIfGoTo(std::shared_ptr<CodeBlockBuilder> codeBlockBuilder,
 
 DecoderIfGoTo::~DecoderIfGoTo() {}
 
-// Jumps to '(labelName)' if stack.top() is "greater than 0".
-// Remove stack.top() after.
+// Jumps to '(labelName)' if stack.top() is not 0.
+// Don't forget to stack.pop().
 void DecoderIfGoTo::Decode(std::unique_ptr<TokenBase> token) {
   TokenIfGoTo* tokenIfGoTo = static_cast<TokenIfGoTo*>(token.get());
   globalStack_->PopToD();
   (*codeBlockBuilder_)
       .WriteLine("@" + tokenIfGoTo->labelName)
-      .WriteLine("D; JGT");
+      .WriteLine("D; JNE");
 }

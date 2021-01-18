@@ -12,7 +12,8 @@ class CodeBlockBuilder {
   CodeBlockBuilder& WriteLine(std::string line);
   CodeBlockBuilder& Extend(CodeBlock codeBlock);
   std::unique_ptr<CodeBlock> build();
-  uint32_t GetLineNumbers();
+  bool IsEmpty();
+
  private:
   std::unique_ptr<CodeBlock> codeBlock_;
 };

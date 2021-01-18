@@ -8,7 +8,7 @@
 class CodeFunction {
  public:
   CodeFunction(std::unique_ptr<CodeBlock> codeBlock);
-  CodeBlock* Merge();
+  CodeBlock Merge();
 
  private:
   std::unique_ptr<CodeBlock> codeBlock_;

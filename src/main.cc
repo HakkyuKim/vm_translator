@@ -56,6 +56,7 @@ int main(int argc, char* argv[]) {
     std::cout << e.what();
     return EXIT_FAILURE;
   }
+  translator.ProcessDecodeResult();
   of << translator.Code();
   return EXIT_SUCCESS;
 }

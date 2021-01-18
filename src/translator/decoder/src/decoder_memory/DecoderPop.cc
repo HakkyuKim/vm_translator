@@ -12,7 +12,6 @@ DecoderPop::~DecoderPop() {}
 
 void DecoderPop::Decode(std::unique_ptr<TokenBase> token) {
   TokenPop* tokenPop = static_cast<TokenPop*>(token.get());
-  std::cout << "here\n";
   if (vmSegments_[tokenPop->segmentType] == nullptr) {
     throw new std::invalid_argument("segment type is null");
   }

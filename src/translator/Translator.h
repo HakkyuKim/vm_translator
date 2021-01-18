@@ -15,6 +15,7 @@ class Translator {
   void CloseFile();
   void SetFile(std::string fileName);
   std::string Code();
+  void ProcessDecodeResult();
 
  private:
   Decoder decoder_;

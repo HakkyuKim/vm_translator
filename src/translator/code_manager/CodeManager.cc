@@ -3,7 +3,7 @@
 #include <iostream>
 
 void CodeManager::CreateCodeFile(std::string fileName) {
-  codeFiles_[fileName] = std::make_unique<CodeFile>();
+  codeFiles_[fileName] = std::make_shared<CodeFile>();
 }
 
 void CodeManager::AddCodeToCodeFile(std::string fileName,
@@ -21,9 +21,15 @@ void CodeManager::AddCodeToCodeFunction(std::string fileName,
 }
 
 CodeBlock CodeManager::Merge() {
+  std::unique_ptr<CodeBlock> bootCodeBlock = std::make_unique<CodeBlock>();
   std::unique_ptr<CodeBlock> codeBlock = std::make_unique<CodeBlock>();
   for (auto& item : codeFiles_) {
-    codeBlock->extend(item.second->Merge());
+    if (item.first == "Sys.vm" || item.first == "Sys") {
+      bootCodeBlock->extend(item.second->Merge());
+    } else {
+      codeBlock->extend(item.second->Merge());
+    }
   }
-  return *codeBlock;
+  bootCodeBlock->extend(*codeBlock);
+  return *bootCodeBlock;
 }

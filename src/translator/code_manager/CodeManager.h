@@ -16,7 +16,7 @@ class CodeManager {
   CodeBlock Merge();
 
  private:
-  std::map<std::string, std::unique_ptr<CodeFile>> codeFiles_;
+  std::map<std::string, std::shared_ptr<CodeFile>> codeFiles_;
 };
 
 #endif  // __CODEMANAGER_H__

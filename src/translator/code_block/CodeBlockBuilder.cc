@@ -22,6 +22,4 @@ std::unique_ptr<CodeBlock> CodeBlockBuilder::build() {
   return tempPtr;
 }
 
-uint32_t CodeBlockBuilder::GetLineNumbers() {
-  return static_cast<uint32_t>(codeBlock_->codes_.size());
-}
+bool CodeBlockBuilder::IsEmpty() { return codeBlock_->codes_.empty(); }

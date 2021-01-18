@@ -7,22 +7,22 @@
 #include "DecodeResult.h"
 #include "DecoderState.h"
 #include "src/token/TokenBase.h"
-#include "src/translator/code_block/CodeBlockBuilder.h"
 #include "src/translator/decoder/src/DecoderBase.h"
 #include "src/type/OperationType.h"
 
 class Decoder {
  public:
   Decoder();
-  std::unique_ptr<DecodeResult> FeedLine(std::unique_ptr<TokenBase> token);
+  void FeedLine(std::unique_ptr<TokenBase> token);
   void SetFile(std::string fileName);
-  std::unique_ptr<DecodeResult> CloseFile();
+  void CloseFile();
+
+  bool IsResultEmpty();
+  std::shared_ptr<DecodeResult> Poll();
 
  private:
-  std::unique_ptr<DecodeResult> PackageDecodeResult();
   std::map<OperationType, std::shared_ptr<DecoderBase>> decoders_;
   std::shared_ptr<DecoderState> decoderState_;
-  std::shared_ptr<CodeBlockBuilder> codeBlockbuilder_;
 };
 
 #endif  // __DECODER_H__

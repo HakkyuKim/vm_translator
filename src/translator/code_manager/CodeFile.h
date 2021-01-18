@@ -14,7 +14,7 @@ class CodeFile {
 
  private:
   std::unique_ptr<CodeBlock> codeBlock_;
-  std::map<std::string, std::unique_ptr<CodeFunction>> codeFunctions_;
+  std::map<std::string, std::shared_ptr<CodeFunction>> codeFunctions_;
 };
 
 #endif  // __CODEFILE_H__

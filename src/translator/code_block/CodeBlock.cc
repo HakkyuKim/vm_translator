@@ -10,9 +10,7 @@ void CodeBlock::extend(CodeBlock codeBlock) {
   }
 }
 
-uint32_t CodeBlock::GetNumberOfLines() {
-  return static_cast<uint32_t>(codes_.size());
-}
+bool CodeBlock::IsEmpty() { return codes_.empty(); }
 
 std::string CodeBlock::String() {
   std::string asmCode = "";
