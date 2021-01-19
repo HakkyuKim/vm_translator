@@ -13,7 +13,7 @@ void DecodeSingleFile(std::string filePath, std::string fileName,
   parser.SetFile(filePath);
   translator.SetFile(fileName);
 
-  std::cout << "input: " + filePath + "\n";
+  std::cout << "  " + filePath + "\n";
   try {
     while (!parser.IsEof()) {
       ParseResult parseResult = parser.ParseNextLine();
@@ -51,6 +51,8 @@ int main(int argc, char* argv[]) {
   Parser parser;
   Translator translator;
 
+  std::cout << "Input files:\n";
+
   auto outputFilePath = inputPathAbs;
   if (fs::is_directory(inputPathAbs)) {
     for (auto& p : fs::directory_iterator(inputPathAbs)) {
@@ -71,7 +73,7 @@ int main(int argc, char* argv[]) {
 
   translator.ProcessDecodeResult();
 
-  std::cout << "Write to " << outputFilePath << "\n";
+  std::cout << "Write to " << outputFilePath << "\n\n";
   std::ofstream of = std::ofstream(outputFilePath.string());
   if (!initialStackAddr.empty())
     of << translator.GetBootStrap(initialStackAddr);

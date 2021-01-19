@@ -15,10 +15,12 @@ void Translator::FeedLine(std::unique_ptr<TokenBase> token) {
 void Translator::CloseFile() { decoder_.CloseFile(); }
 
 void Translator::ProcessDecodeResult() {
+  std::cout << "Translated files functions:\n";
   while (!decoder_.IsResultEmpty()) {
     std::shared_ptr<DecodeResult> result = decoder_.Poll();
     if (result->hasCodeBlock) {
-      std::cout << result->fileName << " " << result->funcName << "\n";
+      std::cout << "  " << result->fileName << " "
+                << (result->funcName == "" ? "None" : result->funcName) << "\n";
       if (result->isFunction) {
         codeManager_.AddCodeToCodeFunction(result->fileName, result->funcName,
                                            std::move(result->codeBlock));
